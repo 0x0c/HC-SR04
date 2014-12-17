@@ -1,25 +1,24 @@
-#define trigPin 12
-#define echoPin 13
+int Echo = 14;
+int Trig = 15;
+int Duration;
+float Distance;
 
 void setup() {
-  Serial.begin (9600);
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
+  Serial.begin(9600);
+  pinMode(Trig,OUTPUT);
+  pinMode(Echo,INPUT);
 }
 
 void loop() {
-  int duration, distance;
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(1000);
-  digitalWrite(trigPin, LOW);
-  duration = pulseIn(echoPin, HIGH);
-  int c = 20;
-  distance = (duration/2) * (331.5 + 0.6 * c) * 100 / 1000000;
-  if (distance >= 200 || distance <= 0){
-    Serial.println("Out of range");
-  }
-  else {
-    Serial.print(distance);
-    Serial.println(" cm");
+  digitalWrite(Trig,LOW);
+  delayMicroseconds(1);
+  digitalWrite(Trig,HIGH);
+  delayMicroseconds(1);
+  digitalWrite(Trig,LOW);
+  Duration = pulseIn(Echo,HIGH);
+  if (Duration>0) {
+    Distance = Duration/2;
+    Distance = Distance * 340 * 0.0001; // ultrasonic speed is 340m/s = 34000cm/s = 0.034cm/us
+    Serial.write((int)floor(Distance));
   }
 }
